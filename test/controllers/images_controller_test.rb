@@ -11,4 +11,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'h1', 'Create New Image'
     assert_select '#image_url', count: 1
   end
+
+  test 'should create image' do
+    assert_difference('Image.count', 1) do
+      post images_url, params: { image: { url: 'https://hello.com' } }
+    end
+  end
+
+  test 'should not create an image with an invalid url' do
+    assert_no_difference('Image.count') do
+      post images_url, params: { image: { url: 'hello' } }
+    end
+  end
 end
