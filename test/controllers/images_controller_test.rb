@@ -33,4 +33,22 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'img', count: 1
     assert_select 'h1', "ID: #{@image.id}"
   end
+
+  test 'should list all images in reverse chronological order' do
+    image1 = Image.create(url: 'https://1.com')
+    image2 = Image.create(url: 'https://2.com')
+    image3 = Image.create(url: 'https://3.com')
+    images = [image3, image2, image1]
+
+    get images_url
+
+    assert_response :success
+    assert_select 'img', count: 3
+
+    assert_select 'img', count: 3 do |elements|
+      elements.each.with_index do |element, i|
+        assert_equal images[i][:url], element[:src]
+      end
+    end
+  end
 end

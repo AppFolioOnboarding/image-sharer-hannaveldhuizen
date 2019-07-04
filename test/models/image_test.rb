@@ -27,5 +27,4 @@ class ImageTest < ActiveSupport::TestCase
       image.save
     end
   end
-
 end
