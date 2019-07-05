@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_01_232121) do
+ActiveRecord::Schema.define(version: 2019_07_01_231539) do
 
   create_table "images", force: :cascade do |t|
     t.string "url"
