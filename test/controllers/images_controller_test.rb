@@ -44,7 +44,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'img', count: 3
-
     assert_select 'img', count: 3 do |elements|
       elements.each.with_index do |element, i|
         assert_equal images[i][:url], element[:src]
