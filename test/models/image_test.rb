@@ -27,4 +27,13 @@ class ImageTest < ActiveSupport::TestCase
       image.save
     end
   end
+
+  test 'should be saved with a tag_list' do
+    image = Image.new(url: 'https://hello.com', tag_list: 'a tag, tag two')
+    assert_difference('Image.count', 1) do
+      image.save
+    end
+
+    assert_equal ['a tag', 'tag two'], image.tag_list
+  end
 end
