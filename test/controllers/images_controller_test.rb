@@ -22,6 +22,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to image_url(Image.last)
   end
 
+  test 'should create an image with the correct tag list' do
+    assert_difference 'Image.count', 1 do
+      post images_url, params: { image: { url: 'https://hello.com', tag_list: 'hello, hi' } }
+    end
+
+    img = Image.last
+
+    assert_equal %w[hello hi], img.tag_list
+  end
+
   test 'should not create an image with an invalid url' do
     assert_no_difference 'Image.count' do
       post images_url, params: { image: { url: 'hello' } }
