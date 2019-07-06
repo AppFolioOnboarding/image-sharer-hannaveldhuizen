@@ -9,7 +9,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get new_image_url
     assert_response :success
     assert_select 'h1', 'Create New Image'
+    assert_select '#image_tag_list', count: 1
     assert_select '#image_url', count: 1
+    assert_select '.btn', count: 1
   end
 
   test 'should create image' do
