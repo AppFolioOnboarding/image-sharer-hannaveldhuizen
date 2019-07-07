@@ -1,2 +1,8 @@
 <h1>ID: <%= @image.id %></h1>
 <%= image_tag @image.url %>
+<h3>
+  Tags:
+  <% @image.tag_list.each do |tag| %>
+    <label class='btn btn-light'><%= tag %></label>
+  <% end %>
+</h3>

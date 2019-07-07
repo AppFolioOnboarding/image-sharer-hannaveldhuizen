@@ -46,6 +46,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'h1', "ID: #{@image.id}"
   end
 
+  test 'should list tags on show page' do
+    @image.update(url: 'https://hello.com', tag_list: ['my special tag', 'another one'])
+    get image_url(@image)
+
+    assert_response :success
+    assert_select 'label', count: 2 do |elements|
+      assert_equal elements[0].text, 'my special tag'
+      assert_equal elements[1].text, 'another one'
+    end
+  end
+
   test 'should list all images in reverse chronological order' do
     image1 = Image.create(url: 'https://1.com')
     image2 = Image.create(url: 'https://2.com')
