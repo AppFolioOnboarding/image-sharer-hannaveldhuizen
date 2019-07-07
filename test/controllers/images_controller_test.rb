@@ -73,4 +73,20 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  test 'should list tags associated with each picture on index page' do
+    all_tags = ['newer image', 'tags should come first', 'older image', 'last tag']
+    Image.create(url: 'https://1.com', tag_list: ['older image', 'last tag'])
+    Image.create(url: 'https://2.com', tag_list: ['newer image', 'tags should come first'])
+
+    get images_url
+
+    assert_response :success
+    assert_select 'img', count: 2
+    assert_select 'label', count: 4 do |elements|
+      elements.each.with_index do |element, i|
+        assert_equal all_tags[i], element.text
+      end
+    end
+  end
 end
