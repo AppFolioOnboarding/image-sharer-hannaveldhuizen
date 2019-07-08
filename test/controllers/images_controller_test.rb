@@ -51,7 +51,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get image_url(@image)
 
     assert_response :success
-    assert_select 'label', count: 2 do |elements|
+    assert_select 'a', count: 2 do |elements|
       assert_equal elements[0].text, 'my special tag'
       assert_equal elements[1].text, 'another one'
     end
@@ -83,10 +83,28 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'img', count: 2
-    assert_select 'label', count: 4 do |elements|
+    assert_select 'a', count: 4 do |elements|
       elements.each.with_index do |element, i|
         assert_equal all_tags[i], element.text
       end
     end
+  end
+
+  test 'should list only the images associated with a certain tag' do
+    Image.create(url: 'https://1.com', tag_list: ['my tag', 'hello', 'whats up'])
+    Image.create(url: 'https://2.com', tag_list: ['my tag', 'another one'])
+    Image.create(url: 'https://3.com', tag_list: ['another one'])
+
+    get tags_path id: 'my tag'
+    assert_response :success
+    assert_select 'img', count: 2
+
+    get tags_path id: 'another one'
+    assert_response :success
+    assert_select 'img', count: 2
+
+    get tags_path id: 'wrong tag'
+    assert_response :success
+    assert_select 'img', count: 0
   end
 end
