@@ -21,6 +21,11 @@ class ImagesController < ApplicationController
     @image = Image.find(params[:id])
   end
 
+  def tags_show
+    @current_tag = params[:id]
+    @images = Image.tagged_with(@current_tag)
+  end
+
   private
 
   def image_params
