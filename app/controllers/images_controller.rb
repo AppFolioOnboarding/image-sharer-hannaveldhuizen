@@ -8,7 +8,7 @@ class ImagesController < ApplicationController
   end
 
   def create
-    @image = Image.new(params.require(:image).permit(:url))
+    @image = Image.new(image_params)
 
     if @image.save
       redirect_to @image
@@ -19,5 +19,11 @@ class ImagesController < ApplicationController
 
   def show
     @image = Image.find(params[:id])
+  end
+
+  private
+
+  def image_params
+    params.require(:image).permit(:url, :tag_list)
   end
 end
