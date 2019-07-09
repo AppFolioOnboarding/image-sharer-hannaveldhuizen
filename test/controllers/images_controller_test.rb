@@ -95,15 +95,15 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     Image.create(url: 'https://2.com', tag_list: ['my tag', 'another one'])
     Image.create(url: 'https://3.com', tag_list: ['another one'])
 
-    get tags_path id: 'my tag'
+    get images_path tag: 'my tag'
     assert_response :success
     assert_select 'img', count: 2
 
-    get tags_path id: 'another one'
+    get images_path tag: 'another one'
     assert_response :success
     assert_select 'img', count: 2
 
-    get tags_path id: 'wrong tag'
+    get images_path tag: 'wrong tag'
     assert_response :success
     assert_select 'img', count: 0
   end

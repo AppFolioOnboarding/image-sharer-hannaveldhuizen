@@ -5,6 +5,8 @@ class ImagesController < ApplicationController
 
   def index
     @images = Image.order('created_at DESC')
+
+    @images = Image.tagged_with(params[:tag]) if params[:tag].present?
   end
 
   def create
@@ -19,11 +21,6 @@ class ImagesController < ApplicationController
 
   def show
     @image = Image.find(params[:id])
-  end
-
-  def tags_show
-    @current_tag = params[:id]
-    @images = Image.tagged_with(@current_tag)
   end
 
   private
