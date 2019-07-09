@@ -107,4 +107,22 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'img', count: 0
   end
+
+  test 'should delete the right image' do
+    img1 = Image.create(url: 'https://1.com')
+    img2 = Image.create(url: 'https://2.com')
+
+    assert_equal img2.id, Image.last.id
+    assert_difference 'Image.count', -1 do
+      delete image_url id: img2.id
+    end
+    assert_redirected_to images_path
+    assert_equal img1.id, Image.last.id
+  end
+
+  test 'should not delete an image that does not exist' do
+    assert_difference 'Image.count', 0 do
+      delete image_url id: 1
+    end
+  end
 end
