@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ImagesControllerTest < ActionDispatch::IntegrationTest
+class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   setup do
     @image = Image.new
   end
@@ -95,16 +95,34 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     Image.create(url: 'https://2.com', tag_list: ['my tag', 'another one'])
     Image.create(url: 'https://3.com', tag_list: ['another one'])
 
-    get tags_path id: 'my tag'
+    get images_path tag: 'my tag'
     assert_response :success
     assert_select 'img', count: 2
 
-    get tags_path id: 'another one'
+    get images_path tag: 'another one'
     assert_response :success
     assert_select 'img', count: 2
 
-    get tags_path id: 'wrong tag'
+    get images_path tag: 'wrong tag'
     assert_response :success
     assert_select 'img', count: 0
+  end
+
+  test 'should delete the right image' do
+    img1 = Image.create(url: 'https://1.com')
+    img2 = Image.create(url: 'https://2.com')
+
+    assert_equal img2.id, Image.last.id
+    assert_difference 'Image.count', -1 do
+      delete image_url id: img2.id
+    end
+    assert_redirected_to images_path
+    assert_equal img1.id, Image.last.id
+  end
+
+  test 'should not delete an image that does not exist' do
+    assert_difference 'Image.count', 0 do
+      delete image_url id: 1
+    end
   end
 end
